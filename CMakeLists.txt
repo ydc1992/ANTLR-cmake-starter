@@ -43,12 +43,29 @@ function(ANTLR)
       -jar ${CMAKE_SOURCE_DIR}/tools/antlr/antlr.jar
       -Dlanguage=Cpp
       -no-listener
-      -no-visitor
+      -visitor
       -o ${source_gen_dir}
       ${source_src_dir}/${source_filename}.g4
   )
   set(output ${source_gen_dir}/${source_filename}.cpp)
 endfunction()
+
+
+set(CompilerFlags
+        CMAKE_CXX_FLAGS
+        CMAKE_CXX_FLAGS_DEBUG
+        CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_CXX_FLAGS_RELWITHDEBINFO
+        CMAKE_CXX_FLAGS_MINSIZEREL
+        CMAKE_C_FLAGS
+        CMAKE_C_FLAGS_DEBUG
+        CMAKE_C_FLAGS_RELEASE
+        CMAKE_C_FLAGS_RELWITHDEBINFO
+        CMAKE_C_FLAGS_MINSIZEREL
+        )
+foreach(CompilerFlag ${CompilerFlags})
+  string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+endforeach()
 
 SET(WITH_LIBCXX OFF CACHE BOOL "")
 add_subdirectory(${CMAKE_SOURCE_DIR}/tools/antlr/antlr4/runtime/Cpp/ EXCLUDE_FROM_ALL)
